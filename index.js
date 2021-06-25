@@ -3,24 +3,20 @@ const http = require('http');
 const { Server } = require("socket.io");
 
 const app = express();
-
 const server = http.createServer(app);
-
 const io = new Server(server);
-let messages = [];
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://127.0.0.1:4001");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
-app.get('/', (req, res) => {
-    res.send('/index.html');
-});
-
+let messages = [
+    'Hi, Julia! Welcome back to work! How was your vacation?',
+    'It was so much fun. I really enjoyed it.',
+    'And will you go there again next year?',
+    'Of course, I will.'
+];
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    io.emit('broadcast', messages);
+
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
